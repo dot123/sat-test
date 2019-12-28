@@ -3,7 +3,7 @@
  * @Github: https://github.com/dot123
  * @Date: 2019-07-25 10:29:34
  * @LastEditors  : conjurer
- * @LastEditTime : 2019-12-28 16:19:47
+ * @LastEditTime : 2019-12-28 16:41:17
  * @Description:
  */
 import SAT = require("SAT");
@@ -24,10 +24,6 @@ export default class Helloworld extends cc.Component {
 
     public onLoad() {
         this.RegTouchEvent(this.triangleNode);
-
-        let manager = cc.director.getCollisionManager();
-        manager.enabled = true;
-        manager.enabledDebugDraw = true;
 
         this.triangleData = this.CreateShape(this.triangleNode);
         this.polygonData = this.CreateShape(this.polygonNode);
@@ -88,7 +84,7 @@ export default class Helloworld extends cc.Component {
 
     private CreateShape(node: cc.Node) {
         let scale = node.scale;
-        let points = node.getComponent(cc.PolygonCollider).points;
+        let points = node.getComponent(cc.PolygonCollider).points; //顶点数组
         let list = [];
         for (let i = 0; i < points.length; i++) {
             let pos = points[i];
