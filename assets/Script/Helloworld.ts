@@ -2,8 +2,8 @@
  * @Author: conjurer
  * @Github: https://github.com/dot123
  * @Date: 2019-07-25 10:29:34
- * @LastEditors  : conjurer
- * @LastEditTime : 2019-12-28 16:41:17
+ * @LastEditors: conjurer
+ * @LastEditTime: 2021-03-07 20:36:26
  * @Description:
  */
 import SAT = require("SAT");
@@ -55,13 +55,11 @@ export default class Helloworld extends cc.Component {
 
     private CheckContact(event) {
         let touchPos = event.getLocation();
-        let pos = this.node.convertToNodeSpaceAR(touchPos);
         let target = event.target;
-        target.position = pos;
+        target.position = touchPos;
 
-        pos = this.CocosPos2SATPos(pos);
-        this.triangleData.pos.x = pos.x;
-        this.triangleData.pos.y = pos.y;
+        this.triangleData.pos.x = touchPos.x;
+        this.triangleData.pos.y = touchPos.y;
 
         let response = new SAT.Response();
         let collided = SAT.testPolygonPolygon(this.triangleData, this.polygonData, response);
@@ -73,8 +71,10 @@ export default class Helloworld extends cc.Component {
             this.triangleData.pos.sub(response.overlapV);
             this.polygonData.pos.add(response.overlapV);
 
-            this.triangleNode.position = this.SATPos2CocosPos(this.triangleData.pos);
-            this.polygonNode.position = this.SATPos2CocosPos(this.polygonData.pos);
+            this.triangleNode.x = this.triangleData.pos.x;
+            this.triangleNode.y = this.triangleData.pos.y;
+            this.polygonNode.x = this.polygonData.pos.x;
+            this.polygonNode.y = this.polygonData.pos.y;
         } else {
             this.polygonNode.color = cc.Color.WHITE;
             this.triangleNode.color = cc.Color.WHITE;
@@ -84,38 +84,35 @@ export default class Helloworld extends cc.Component {
 
     private CreateShape(node: cc.Node) {
         let scale = node.scale;
-        let points = node.getComponent(cc.PolygonCollider).points; //顶点数组
+        //顶点数组
+        let points = node.getComponent(cc.PolygonCollider).points;
         let list = [];
         for (let i = 0; i < points.length; i++) {
             let pos = points[i];
-            list.push(this.V(pos.x * -1 * scale, pos.y * -1 * scale)); //x y要乘-1  逆时针
+            list.push(this.V(pos.x * scale, pos.y * scale));
         }
         return this.P(node.position, list);
     }
 
     // Alias a few things in SAT.js to make the code shorter
     public V(x, y) {
-        return new SAT.Vector(x, y); //向量
+        //向量
+        return new SAT.Vector(x, y);
     }
 
+    //多边形
     public P(pos, points) {
-        return new SAT.Polygon(this.CocosPos2SATPos(pos), points); //多边形
+        return new SAT.Polygon(pos, points);
     }
 
+    //圆形
     public C(pos, r) {
-        return new SAT.Circle(this.CocosPos2SATPos(pos), r); //圆形
+        return new SAT.Circle(pos, r);
     }
 
+    //矩形
     public B(pos, w, h) {
         // return new SAT.Box(pos, w, h).toPolygon();
-        return this.P(pos, [this.V(-w / 2, -h / 2), this.V(w / 2, -h / 2), this.V(w / 2, h / 2), this.V(-w / 2, h / 2)]); //长方形
-    }
-
-    public SATPos2CocosPos(pos) {
-        return cc.v2(pos.x - 960 / 2, -pos.y + 640 / 2);
-    }
-
-    public CocosPos2SATPos(pos) {
-        return this.V(pos.x + 960 / 2, -pos.y + 640 / 2);
+        return this.P(pos, [this.V(-w / 2, -h / 2), this.V(w / 2, -h / 2), this.V(w / 2, h / 2), this.V(-w / 2, h / 2)]);
     }
 }

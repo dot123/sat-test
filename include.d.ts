@@ -1,19 +1,11 @@
-declare module "LanguageData" {
-    export function init(language: string): void;
-
-    export function t(key: string, opt: Object = null): string;
-
-    export function updateSceneRenderers(): void;
-}
-
-declare module "HootMgr" {
-    export function GetModel(): any;
-}
-
-declare module "FileSaver" {
-    export function saveAs(file: File);
-}
-
+/*
+ * @Author: conjurer
+ * @Github: https://github.com/dot123
+ * @Date: 2021-03-07 20:06:04
+ * @LastEditors: conjurer
+ * @LastEditTime: 2021-03-07 20:31:35
+ * @Description:
+ */
 declare module "SAT" {
     export function Vector(x, y): void; //可以用 cc.V2代替
     export function Polygon(pos, points: Array<any>): void;
@@ -27,37 +19,3 @@ declare module "SAT" {
 }
 
 declare let require: (string) => any;
-
-declare namespace TalkingData {
-    class TDCCAccount {
-        public static setAccount(accountId: string): TDCCAccount;
-
-        setAccountName(accountName: string): void;
-
-        setAccountType(accountType: any): void;
-
-        setLevel(level: number): void;
-
-        setGender(gender: any): void;
-
-        setAge(age: number): void;
-
-        setGameServer(gameServer: string): void;
-    }
-
-    class TDCCMission {
-        public static onBegin(missionId: string): TDCCAccount;
-        public static onCompleted(missionId: string): void;
-        public static onFailed(missionId: string, failedCause: string): void;
-    }
-    class TDCCVirtualCurrency {
-        public static onChargeRequest(orderId: string, iapId: string, currencyAmount: number, currencyType: string, virtualCurrencyAmount: number, paymentType: string): void;
-        public static onChargeSuccess(orderId: string): void;
-        public static onReward(currencyAmount: number, reason: string): void;
-    }
-
-    class TDCCItem {
-        public static onPurchase(item: string, number: number, price: number): void;
-        public static onUse(item: string, number: number): void;
-    }
-}
